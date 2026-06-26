@@ -187,7 +187,7 @@ This output shows a cleaner custom retrieval run over Uber and Lyft annual repor
 
 This output shows the assistant using helper functions through a ReAct-style workflow before returning the final result.
 
-![Agentic tool-use example](outputs/agentic_tool_use_math_tools.png)
+![Agentic tool-use example](outputs/agentic_tool_use_circle_area.png)
 
 ## Tech Stack
 
