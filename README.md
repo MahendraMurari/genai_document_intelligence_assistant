@@ -1,54 +1,54 @@
 # GenAI Document Intelligence Assistant
 
-A document intelligence system that uses Retrieval-Augmented Generation, vector search, LlamaIndex/LangChain workflows, local LLM experimentation, and agent-based tool execution to search, compare, and reason over unstructured documents.
+A document intelligence system that uses RAG, vector search, LlamaIndex/LangChain workflows, Llama 3, Phi-3 experimentation, and deterministic tool execution to search, compare, and reason over unstructured documents.
 
-The project focuses on a practical GenAI workflow: processing large PDF/text sources, converting them into searchable chunks, retrieving the most relevant context, generating grounded answers with source references, and using deterministic tools for structured follow-up decisions.
-
-The sample data uses public annual reports, but the same workflow can be applied to policies, compliance documents, financial reports, SOPs, legal files, HR manuals, insurance documents, or internal knowledge bases.
+The project demonstrates a retrieval-first GenAI workflow:
 
 ```text
-Documents -> chunks -> embeddings -> vector retrieval -> grounded LLM answer -> tool execution -> evidence traceability
+Documents -> chunks -> embeddings -> vector retrieval -> grounded LLM answer -> deterministic tool execution -> evidence traceability
 ```
+
+For demonstration, the project uses public annual reports as sample documents. The same workflow can be adapted to policies, compliance documents, financial reports, SOPs, legal files, HR manuals, insurance documents, and internal knowledge bases.
 
 ---
 
 ## Why I Built This
 
-Important business information is often buried inside long documents. Keyword search can help, but it usually does not understand the user’s question or connect related context across multiple files.
+Important information is often buried inside long PDFs, reports, manuals, and internal documents. Keyword search can help, but it does not always retrieve the right context or connect related information across files.
 
-I built this project to demonstrate how a RAG-based document assistant can retrieve relevant evidence first, then use an LLM to generate a grounded answer based on that source context.
+I built this project to demonstrate how a document assistant can retrieve relevant evidence first, then generate a grounded answer from that context.
 
-The project also includes an agent-based tool layer. The LLM is used for summarization and reasoning over retrieved context, while deterministic Python tools handle structured operations such as risk classification, scoring, priority assignment, and recommended action.
+The project also includes a deterministic tool layer for structured decisions. The LLM handles summarization from retrieved context, while Python tools handle risk classification, scoring, priority assignment, and recommended action.
 
 ---
 
 ## What This Project Includes
 
-### Multi-document RAG
+### Multi-document retrieval
 
-The project processes multiple PDF/text documents, splits them into chunks, creates embeddings, and retrieves the most relevant sections for a user query.
+The system processes multiple PDF/text documents, splits them into chunks, creates embeddings, and retrieves relevant sections for a user query.
 
-The output includes the query, retrieved sources, page numbers, similarity scores, and evidence snippets.
+The outputs include source document names, page numbers, similarity scores, and evidence snippets.
 
 ### Grounded Llama 3 answer generation
 
-A focused workflow retrieves compact source evidence and sends only that context to Llama 3 through Hugging Face Inference API.
+The focused Llama 3 workflow retrieves compact source evidence and sends only that context to Llama 3 through Hugging Face Inference API.
 
 This keeps the answer grounded in retrieved documents instead of relying on open-ended generation.
 
 ### LlamaIndex workflow
 
-The LlamaIndex implementation creates document-specific query engines and exposes them through a tool-based interface. This is useful when different documents need to be searched separately and compared.
+The LlamaIndex implementation creates document-specific query engines and exposes them through a tool-based interface. This supports targeted retrieval when different documents represent different knowledge sources.
 
-### LangChain / Phi-3 local RAG workflow
+### LangChain / Phi-3 workflow
 
-The repository also includes a LangChain + Phi-3 Mini workflow with ChromaDB experimentation. This part is included as a local LLM RAG implementation path.
+The repository includes a LangChain + Phi-3 Mini path with ChromaDB experimentation. This serves as the local LLM and persisted vector-store implementation path.
 
-### Agent-based risk triage
+### Deterministic risk triage
 
-The agent-based workflow takes retrieved evidence and passes it into Python tools that classify the signal, calculate a score, assign priority, and recommend the next action.
+The risk triage workflow passes retrieved evidence into Python tools that classify the signal, calculate a confidence-weighted score, assign priority, and recommend the next action.
 
-This avoids asking the LLM to generate operational scores or decisions without deterministic logic.
+This avoids asking the LLM to generate operational scores or routing decisions without deterministic logic.
 
 ---
 
@@ -56,17 +56,17 @@ This avoids asking the LLM to generate operational scores or decisions without d
 
 | Path | Purpose |
 |---|---|
-| `src/run_document_risk_intelligence_demo.py` | Main end-to-end demo combining retrieval, Llama 3 response generation, tool execution, and evidence traceability |
+| `src/run_document_risk_intelligence_demo.py` | Main end-to-end workflow combining retrieval, Llama 3 response generation, tool execution, and evidence traceability |
 | `src/run_llama3_grounded_rag.py` | Focused Llama 3 grounded RAG workflow |
-| `src/rag_agent_tools.py` | Agent-based helper tools for risk classification, scoring, priority assignment, and action recommendation |
+| `src/rag_agent_tools.py` | Deterministic tools for risk classification, scoring, priority assignment, and action recommendation |
 | `src/run_rag_demo.py` | Lightweight custom retrieval demo using embeddings and cosine similarity |
 | `src/rag_llamaindex.py` | LlamaIndex-based document retrieval workflow |
 | `src/llm_init.py` | LLM initialization and Hugging Face token handling |
 | `src/llm_tasks.py` | Shared helper functions for LLM and retrieval tasks |
 | `src/rag_phi3_langchain.py` | LangChain + Phi-3 local RAG workflow |
 | `src/rag_phi3_demo.py` | Demo runner for the Phi-3 workflow |
-| `sample_docs/` | Sample documents used for RAG workflows |
-| `outputs/` | Screenshots of successful runs |
+| `sample_docs/` | Sample documents used for retrieval workflows |
+| `outputs/` | Screenshots of successful workflow runs |
 
 ---
 
@@ -74,7 +74,7 @@ This avoids asking the LLM to generate operational scores or decisions without d
 
 ### Document intelligence workflow
 
-This run demonstrates the full workflow in one place: document ingestion, chunking, embedding-based retrieval, Llama 3 response generation, agent-based triage, source pages, similarity scores, and final decision.
+End-to-end workflow covering document ingestion, chunking, embedding-based retrieval, Llama 3 answer generation, deterministic risk triage, source pages, similarity scores, and final decision.
 
 ![Document intelligence workflow](outputs/document_intelligence_workflow.png)
 
@@ -82,17 +82,41 @@ This run demonstrates the full workflow in one place: document ingestion, chunki
 
 ### Grounded Llama 3 RAG answer
 
-This output focuses on the Llama 3 RAG workflow. The assistant retrieves source-specific evidence first and then generates an answer using only that retrieved context.
+Focused RAG output showing the user query, Llama 3 response, retrieved evidence, source documents, page numbers, and similarity scores.
 
 ![Grounded Llama 3 RAG answer](outputs/llama3_grounded_rag_answer.png)
 
 ---
 
-### Agentic risk triage workflow
+### Deterministic risk triage
 
-This output demonstrates the tool-execution layer. A retrieved evidence chunk is passed into deterministic tools that return a risk category, score, priority, recommended action, and final decision.
+Tool-execution output where retrieved evidence is passed into Python functions that return risk category, score, priority, recommended action, and final decision.
 
 ![Agentic risk triage workflow](outputs/agentic_risk_triage_workflow.png)
+
+---
+
+## Architecture
+
+```text
+User Query
+   ↓
+Document Loader
+   ↓
+Chunking
+   ↓
+Embedding Model
+   ↓
+Vector Retrieval
+   ↓
+Retrieved Source Context
+   ↓
+Grounded LLM Response
+   ↓
+Deterministic Tool Execution
+   ↓
+Evidence Traceability + Final Decision
+```
 
 ---
 
@@ -108,7 +132,7 @@ This output demonstrates the tool-execution layer. A retrieved evidence chunk is
 - Microsoft Phi-3 Mini
 - PDF parsing
 - Vector similarity search
-- Agent-based Python tools
+- Deterministic Python tools
 
 ---
 
@@ -164,7 +188,7 @@ Run the focused Llama 3 grounded RAG workflow:
 python src/run_llama3_grounded_rag.py
 ```
 
-Run the agent-based tool workflow:
+Run the deterministic risk triage workflow:
 
 ```bash
 python src/rag_agent_tools.py
@@ -180,7 +204,9 @@ python src/rag_phi3_demo.py
 
 ## Notes
 
-The main demo uses local PDF parsing, embedding generation, and in-memory vector similarity search. The LangChain/Phi-3 workflow includes ChromaDB-based vector-store experimentation.
+The main demo uses local PDF parsing, embedding generation, and in-memory vector similarity search. Llama 3 generation is handled through Hugging Face Inference API.
+
+The LangChain/Phi-3 path includes ChromaDB-based vector-store experimentation.
 
 Generated vector indexes, local cache files, and secrets are intentionally excluded from the repository.
 
@@ -200,14 +226,10 @@ HF_TOKEN=your_huggingface_token_here
 
 ## What This Project Demonstrates
 
-This project demonstrates how a document assistant can be built around retrieval-first design:
-
-- split long documents into searchable chunks
-- retrieve relevant context with embeddings
-- generate grounded answers from source evidence
-- compare information across documents
-- preserve source names, page numbers, and similarity scores
-- use deterministic tools for structured decisions
-- keep secrets and generated artifacts out of source control
-
-The final result is a practical GenAI document intelligence workflow that is inspectable, modular, and extensible.
+- retrieval-first document processing
+- multi-document semantic search
+- grounded LLM generation from retrieved evidence
+- source document, page, and similarity-score traceability
+- deterministic tool execution for structured decisions
+- secure token handling through environment variables
+- local LLM and vector-store experimentation through Phi-3 and ChromaDB
